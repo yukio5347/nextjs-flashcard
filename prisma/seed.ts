@@ -4,14 +4,18 @@ import { faker } from '@faker-js/faker';
 const prisma = new PrismaClient();
 
 async function main() {
-  // const user = await prisma.user.create({
-  //   data: {
-  //     name: faker.name.fullName(),
-  //     email: faker.internet.email(),
-  //     password: '$2b$10$3KAjHfOm/Q1G6vcjunDfSOF6XerN3Grq8Es3L3VtCKwZ4X4wmNy1e', // password
-  //   },
-  // });
-  // console.log(user);
+  let contents = '';
+  for (let i = 0; i < 10; i++) {
+    contents += faker.lorem.word() + ',' + faker.lorem.word() + '\n';
+  }
+
+  const card = await prisma.card.create({
+    data: {
+      title: faker.lorem.words(),
+      content: contents,
+    },
+  });
+  console.log(card);
 }
 
 main()
