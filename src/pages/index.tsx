@@ -1,8 +1,8 @@
 import { Card } from '@prisma/client';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
-import { useState } from 'react';
 
+import { useAlertContext } from '@/components/Alert';
 import { serialize } from '@/lib/helpers';
 import { prisma } from '@/lib/prisma';
 
@@ -14,41 +14,26 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 export default function Home({ cards }: { cards: Card[] }) {
-  const [flash, setFlash] = useState({ type: '', message: '' });
+  const { showAlert } = useAlertContext();
 
-  async function deleteCard(card: Card, index: number): Promise<void> {
+  const destroyCard = async (card: Card, index: number) => {
     if (confirm(`You are about to delete "${card.title}"`)) {
-      const res = await fetch(`/api/cards/${card.id}`, {
+      await fetch(`/api/cards/${card.id}`, {
         method: 'DELETE',
-      });
-      setFlash(await res.json());
-      if (res.ok) {
-        cards.splice(index, 1);
-      }
+      })
+        .then((res) => {
+          if (res.ok) {
+            cards.splice(index, 1);
+          }
+          return res.json();
+        })
+        .then((json) => showAlert(json.type, json.message));
     }
-  }
+  };
 
   return (
-    <main className='container'>
+    <>
       <h1 className='mb-5 text-lg font-semibold'>Your flash cards</h1>
-      {flash.message && (
-        <>
-          <div className={`${flash.type} relative p-4 mb-5 border-l-4 rounded-r-lg transition-opacity`} role='alert'>
-            <p>{flash.message}</p>
-            <button onClick={() => setFlash({ type: '', message: '' })} className='absolute top-0 bottom-0 right-0 p-4'>
-              <svg
-                className='fill-current h-6 w-6'
-                role='button'
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 20 20'
-              >
-                <title>Close</title>
-                <path d='M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z' />
-              </svg>
-            </button>
-          </div>
-        </>
-      )}
       {cards ? (
         <div className='grid grid-cols-3 gap-5 mb-5'>
           {cards.map((card, index) => (
@@ -77,7 +62,7 @@ export default function Home({ cards }: { cards: Card[] }) {
                 </Link>
                 <button
                   className='py-1 px-2 inline-block rounded border border-red-600 text-red-600 text-xs transition-colors hover:text-white hover:bg-red-600'
-                  onClick={() => deleteCard(card, index)}
+                  onClick={() => destroyCard(card, index)}
                 >
                   Delete
                 </button>
@@ -94,6 +79,6 @@ export default function Home({ cards }: { cards: Card[] }) {
       >
         New
       </Link>
-    </main>
+    </>
   );
 }
