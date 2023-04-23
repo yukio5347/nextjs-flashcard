@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 @layer components {
-  .alert-sky {
+  .alert-info {
     @apply bg-sky-100 border-sky-500 text-sky-700;
   }
-  .alert-sky svg {
+  .alert-info svg {
     @apply text-sky-500;
   }
-  .alert-red {
+  .alert-error {
     @apply bg-red-100 border-red-500 text-red-700;
   }
-  .alert-red svg {
+  .alert-error svg {
     @apply text-red-500;
   }
 }
