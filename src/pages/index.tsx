@@ -16,7 +16,7 @@ export const getStaticProps: GetStaticProps = async () => {
 export default function Home({ cards }: { cards: Card[] }) {
   const { showAlert } = useAlertContext();
 
-  const destroyCard = async (card: Card, index: number) => {
+  const destroy = async (card: Card, index: number) => {
     if (confirm(`You are about to delete "${card.title}"`)) {
       await fetch(`/api/cards/${card.id}`, {
         method: 'DELETE',
@@ -62,7 +62,7 @@ export default function Home({ cards }: { cards: Card[] }) {
                 </Link>
                 <button
                   className='py-1 px-2 inline-block rounded border border-red-600 text-red-600 text-xs transition-colors hover:text-white hover:bg-red-600'
-                  onClick={() => destroyCard(card, index)}
+                  onClick={() => destroy(card, index)}
                 >
                   Delete
                 </button>
