@@ -62,6 +62,11 @@ export const CardForm = ({ card = { title: '', content: '' } }: { card?: CardDat
       });
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setCardData({ ...cardData, [name]: value });
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setProcessing(true);
@@ -69,11 +74,11 @@ export const CardForm = ({ card = { title: '', content: '' } }: { card?: CardDat
   };
 
   return (
-    <form onSubmit={(e) => handleSubmit(e)}>
+    <form onSubmit={handleSubmit}>
       <input
         autoFocus
         required
-        onChange={(e) => setCardData({ ...cardData, title: e.target.value })}
+        onChange={handleChange}
         placeholder='Card Title'
         type='text'
         name='title'
@@ -82,9 +87,10 @@ export const CardForm = ({ card = { title: '', content: '' } }: { card?: CardDat
       />
       <textarea
         required
-        onChange={(e) => setCardData({ ...cardData, content: e.target.value })}
+        onChange={handleChange}
         rows={8}
         placeholder='merah,red'
+        name='content'
         value={cardData.content}
         className='p-4 w-full border border-gray-300 rounded-lg'
       />
