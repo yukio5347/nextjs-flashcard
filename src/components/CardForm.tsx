@@ -5,7 +5,12 @@ import { useState } from 'react';
 
 import { useAlertContext } from '@/components/Alert';
 import { getErrorMessage } from '@/lib/helpers';
-import { CardData } from '@/models/Card';
+
+export interface CardData {
+  id?: number;
+  title: string;
+  content: string;
+}
 
 const getData = (cardData: CardData) => {
   return pick(cardData, ['title', 'content']);
