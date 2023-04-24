@@ -18,7 +18,7 @@ export default function Home({ cards }: { cards: Card[] }) {
 
   const destroy = async (card: Card, index: number) => {
     if (confirm(`You are about to delete "${card.title}"`)) {
-      await fetch(`/api/cards/${card.id}`, {
+      fetch(`/api/cards/${card.id}`, {
         method: 'DELETE',
       })
         .then((res) => {
