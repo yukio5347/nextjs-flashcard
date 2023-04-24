@@ -38,19 +38,23 @@ export const CardForm = ({ card = { title: '', content: '' } }: { card?: CardDat
   };
 
   const update = async (id: number, cardData: CardData): Promise<void> => {
-    try {
-      const data = getData(cardData);
-      const res = await fetch(`/api/cards/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+    const data = getData(cardData);
+    fetch(`/api/cards/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.ok) {
+          router.push('/');
+        }
+        return res.json();
+      })
+      .then((json) => showAlert(json.type, json.message))
+      .catch((error) => {
+        showAlert('error', getErrorMessage(error));
+        console.error(error);
       });
-      if (res.ok) {
-        await router.push('/');
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
