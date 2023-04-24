@@ -28,6 +28,7 @@ export const AlertProvider = ({ children }: { children: React.ReactNode }) => {
         setMessage('');
       }, 3000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message]);
 
   const showAlert = (type: AlertType, message: string): void => {

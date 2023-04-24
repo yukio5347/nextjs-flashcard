@@ -38,6 +38,7 @@ export default function Index({ card }: { card: Card }) {
     setShowAnswer(false);
     setLines(getLines);
     router.push(`/cards/${card.id}?index=0`, undefined, { shallow: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRandom, isBackward]);
 
   useEffect(() => {
