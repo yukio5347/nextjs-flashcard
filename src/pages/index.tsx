@@ -34,7 +34,9 @@ export default function Home({ cards }: { cards: Card[] }) {
   return (
     <>
       <h1 className='mb-5 text-lg font-semibold'>Your flash cards</h1>
-      {cards ? (
+      {cards.length === 0 ? (
+        <p className='mb-5'>No flash cards found. Add a new one!</p>
+      ) : (
         <div className='grid grid-cols-3 gap-5 mb-5'>
           {cards.map((card, index) => (
             <div
@@ -70,8 +72,6 @@ export default function Home({ cards }: { cards: Card[] }) {
             </div>
           ))}
         </div>
-      ) : (
-        <p className='mb-5'>No flash cards found. Add a new one!</p>
       )}
       <Link
         href='/cards/new'
