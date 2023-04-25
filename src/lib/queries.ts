@@ -14,6 +14,7 @@ export const cardStaticProps = async (params: ParsedUrlQuery | undefined) => {
   );
   return {
     props: { card },
+    notFound: !card,
   };
 };
 
@@ -27,7 +28,7 @@ export const cardStaticPaths = async () => {
     };
   });
   return {
-    paths: paths,
-    fallback: false,
+    paths,
+    fallback: 'blocking' as const,
   };
 };
