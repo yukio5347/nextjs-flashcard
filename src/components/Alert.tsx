@@ -39,7 +39,7 @@ export const AlertProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AlertContext.Provider value={{ type, message, showAlert }}>
       {message && (
-        <div className={`alert-${type} fixed top-0 left-0 z-10 p-4 mb-5 w-full border-l-4`} role='alert'>
+        <div className={`alert-${type} fixed top-5 right-5 z-10 p-4 mb-5 w-80 rounded-r-lg border-l-4`} role='alert'>
           <p>{message}</p>
           <button onClick={() => setMessage('')} className='absolute top-0 bottom-0 right-0 p-4'>
             <svg className='fill-current h-6 w-6' role='button' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'>
