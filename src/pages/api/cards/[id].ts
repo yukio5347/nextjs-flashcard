@@ -14,6 +14,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         },
         data: req.body,
       });
+      await res.revalidate(`/cards/${id}`);
       return res.status(200).json({
         type: 'info',
         message: 'The card has been updated.',
@@ -33,6 +34,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
           id: id,
         },
       });
+      await res.revalidate(`/cards/${id}`);
       return res.status(200).json({
         type: 'info',
         message: 'The card has been deleted.',
