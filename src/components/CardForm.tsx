@@ -6,71 +6,50 @@ import { useState } from 'react';
 import { useAlertContext } from '@/components/Alert';
 import { getErrorMessage } from '@/lib/helpers';
 
-export interface CardData {
-  id?: number;
-  title: string;
-  content: string;
-}
-
-const getData = (cardData: CardData) => {
-  return pick(cardData, ['title', 'content']);
+const defaultData = {
+  title: '',
+  content: '',
 };
 
-export const CardForm = ({ card = { title: '', content: '' } }: { card?: CardData }) => {
-  const [cardData, setCardData] = useState<CardData>(card);
+type DataType = typeof defaultData & {
+  id?: number;
+};
+
+export const CardForm = ({ card = defaultData }: { card?: DataType }) => {
+  const [formData, setFormData] = useState<DataType>({ ...defaultData, ...card });
   const [processing, setProcessing] = useState(false);
   const router = useRouter();
   const { showAlert } = useAlertContext();
 
-  const store = async (cardData: CardData): Promise<void> => {
-    const data = getData(cardData);
-    fetch('/api/cards', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        if (res.ok) {
-          router.push('/');
-        }
-        return res.json();
-      })
-      .then((json) => showAlert(json.type, json.message))
-      .catch((error) => {
-        showAlert('error', getErrorMessage(error));
-        console.error(error);
-      });
-  };
-
-  const update = async (id: number, cardData: CardData): Promise<void> => {
-    const data = getData(cardData);
-    fetch(`/api/cards/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        if (res.ok) {
-          router.push('/');
-        }
-        return res.json();
-      })
-      .then((json) => showAlert(json.type, json.message))
-      .catch((error) => {
-        showAlert('error', getErrorMessage(error));
-        console.error(error);
-      });
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setCardData({ ...cardData, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setProcessing(true);
-    card.id ? update(card.id, cardData) : store(cardData);
+    card.id ? submit(`/api/cards/${card.id}`, 'PUT') : submit('/api/cards', 'POST');
+  };
+
+  const submit = async (url: string, method: 'POST' | 'PUT') => {
+    const data = pick(formData, Object.keys(defaultData));
+    fetch(url, {
+      method: method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.ok) {
+          router.push('/');
+        }
+        return res.json();
+      })
+      .then((json) => showAlert(json.type, json.message))
+      .catch((error) => {
+        showAlert('error', getErrorMessage(error));
+        console.error(error);
+      });
   };
 
   return (
@@ -82,7 +61,7 @@ export const CardForm = ({ card = { title: '', content: '' } }: { card?: CardDat
         placeholder='Card Title'
         type='text'
         name='title'
-        value={cardData.title}
+        value={formData.title}
         className='p-4 mb-5 w-full border border-gray-300 rounded-lg'
       />
       <textarea
@@ -91,13 +70,13 @@ export const CardForm = ({ card = { title: '', content: '' } }: { card?: CardDat
         rows={8}
         placeholder='merah,red'
         name='content'
-        value={cardData.content}
+        value={formData.content}
         className='p-4 w-full border border-gray-300 rounded-lg'
       />
       <p className='text-sm text-gray-500'>* 1 line and comma separated for a word pair</p>
       <div className='flex justify-between mt-5'>
         <button
-          disabled={!cardData.title || !cardData.content || processing}
+          disabled={!formData.title || !formData.content || processing}
           className='w-20 py-2 px-4 inline-block rounded bg-sky-500 text-sm text-white transition-colors hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-sky-500'
         >
           {processing ? (
