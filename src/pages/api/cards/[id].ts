@@ -13,12 +13,23 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
   if (req.method === 'PUT') {
     try {
-      await prisma.card.update({
+      const card = await prisma.card.update({
         where: {
           id: id,
         },
-        data: req.body,
+        data: { title: req.body.title },
       });
+      await prisma.word.deleteMany({
+        where: {
+          cardId: id,
+        },
+      });
+      const words = req.body.words.split('\n').map((line: string) => {
+        const [front, back] = line.split(',');
+        return { front, back, cardId: card.id };
+      });
+      await prisma.word.createMany({ data: words });
+
       await revalidateCard(res);
       return res.status(200).json({
         type: 'info',
@@ -34,6 +45,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 
   if (req.method === 'DELETE') {
     try {
+      await prisma.word.deleteMany({
+        where: {
+          cardId: id,
+        },
+      });
       await prisma.card.delete({
         where: {
           id: id,

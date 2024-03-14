@@ -10,6 +10,9 @@ export const cardStaticProps = async (params: ParsedUrlQuery | undefined) => {
       where: {
         id: id,
       },
+      include: {
+        words: true,
+      },
     }),
   );
   return {

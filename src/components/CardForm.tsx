@@ -8,7 +8,7 @@ import { getErrorMessage } from '@/lib/helpers';
 
 const defaultData = {
   title: '',
-  content: '',
+  words: '',
 };
 
 type DataType = typeof defaultData & {
@@ -69,14 +69,14 @@ export const CardForm = ({ card = defaultData }: { card?: DataType }) => {
         onChange={handleChange}
         rows={8}
         placeholder='merah,red'
-        name='content'
-        value={formData.content}
+        name='words'
+        value={formData.words}
         className='p-4 w-full border border-gray-300 rounded-lg'
       />
       <p className='text-sm text-gray-500'>* 1 line and comma separated for a word pair</p>
       <div className='flex justify-between mt-5'>
         <button
-          disabled={!formData.title || !formData.content || processing}
+          disabled={!formData.title || !formData.words || processing}
           className='w-20 py-2 px-4 inline-block rounded bg-sky-500 text-sm text-white transition-colors hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-sky-500'
         >
           {processing ? (

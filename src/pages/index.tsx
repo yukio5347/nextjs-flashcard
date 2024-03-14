@@ -1,9 +1,14 @@
-import { Card } from '@prisma/client';
+import { Card, Word } from '@prisma/client';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import useSWR from 'swr';
 
 import { useAlertContext } from '@/components/Alert';
+
+type CardType = Card & {
+  words: Word[];
+  _count: { words: number };
+};
 
 export default function Home() {
   const { showAlert } = useAlertContext();
@@ -54,22 +59,16 @@ export default function Home() {
         </div>
       ) : data ? (
         <div className='grid grid-cols-3 gap-5'>
-          {data.map((card: Card, index: number) => (
+          {data.map((card: CardType, index: number) => (
             <div
               key={card.id}
               className='relative rounded-lg overflow-hidden border shadow transition-shadow hover:shadow-lg'
             >
               <Link href={`/cards/${card.id}`} className='py-4 px-6 pb-14 block'>
-                <div className='font-semibold text-lg mb-2'>{card.title}</div>
-                <p>
-                  {card.content
-                    .trim()
-                    .split('\n')
-                    .slice(0, 3)
-                    .map((line) => line.split(',')[0])
-                    .join(', ')}
-                  ...
-                </p>
+                <div className='font-semibold text-lg mb-2'>
+                  {card.title} ({card._count.words})
+                </div>
+                <p>{card.words.map((word: Word) => word.front).join(', ')}...</p>
               </Link>
               <div className='absolute bottom-4 left-6'>
                 <Link
