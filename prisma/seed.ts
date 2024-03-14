@@ -1,20 +1,26 @@
-import { PrismaClient } from '@prisma/client';
+import { Card, PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  let contents = '';
-  for (let i = 0; i < 10; i++) {
-    contents += faker.lorem.word() + ',' + faker.lorem.word() + '\n';
-  }
-
-  const card = await prisma.card.create({
+  const card: Card = await prisma.card.create({
     data: {
       title: faker.lorem.words(),
-      content: contents,
     },
   });
+
+  for (let i = 0; i < 10; i++) {
+    await prisma.word.create({
+      data: {
+        front: faker.lorem.words(),
+        back: faker.lorem.words(),
+        cardId: card.id,
+      },
+    });
+  }
+
+
   console.log(card);
 }
 
