@@ -12,7 +12,15 @@ export default function Edit({ card }: { card: CardType }) {
   const cardData = {
     id: card.id,
     title: card.title,
-    words: card.words.map((word) => `${word.front},${word.back}`).join('\n'),
+    words: card.words
+      .map((word) => {
+        if (word.example) {
+          return `${word.front},${word.back},${word.example}`;
+        } else {
+          return `${word.front},${word.back}`;
+        }
+      })
+      .join('\n'),
   };
 
   return (

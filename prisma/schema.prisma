@@ -25,6 +25,7 @@ model Word {
   id        Int      @id @default(autoincrement())
   front     String
   back      String
+  example   String?
   card      Card     @relation(fields: [cardId], references: [id])
   cardId    Int      @map(name: "card_id")
   @@map(name: "words")

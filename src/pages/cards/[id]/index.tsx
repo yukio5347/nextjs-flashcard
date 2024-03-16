@@ -83,28 +83,27 @@ export default function Index({ card }: { card: CardType }) {
       <div className='grid grid-cols-2 gap-x-10 gap-y-8 text-2xl'>
         {words[index] ? (
           <>
-            <div className='p-5 w-full h-80 flex items-center justify-center rounded-lg'>
-              {isBackward ? words[index].back : words[index].front}
+            <div className='relative p-5 w-full h-80 flex items-center justify-center'>
+              <p>{isBackward ? words[index].back : words[index].front}</p>
+              {showAnswer && <p className='absolute bottom-20 text-lg'>{words[index].example}</p>}
             </div>
             {showAnswer ? (
               <div className='relative flex items-center justify-center'>
-                <>
-                  <div>{isBackward ? words[index].front : words[index].back}</div>
-                  <div className='absolute bottom-5 grid grid-cols-2 gap-10'>
-                    <button
-                      onClick={() => nextWord(false)}
-                      className='text-lg border shadow transition-shadow hover:shadow-lg rounded-md py-3 px-5'
-                    >
-                      <Xmark /> Missed
-                    </button>
-                    <button
-                      onClick={() => nextWord(true)}
-                      className='text-lg border shadow transition-shadow hover:shadow-lg rounded-md py-3 px-5'
-                    >
-                      <Circle /> Corrected
-                    </button>
-                  </div>
-                </>
+                <div>{isBackward ? words[index].front : words[index].back}</div>
+                <div className='absolute bottom-5 grid grid-cols-2 gap-10'>
+                  <button
+                    onClick={() => nextWord(false)}
+                    className='text-lg border shadow transition-shadow hover:shadow-lg rounded-md py-3 px-5'
+                  >
+                    <Xmark /> Missed
+                  </button>
+                  <button
+                    onClick={() => nextWord(true)}
+                    className='text-lg border shadow transition-shadow hover:shadow-lg rounded-md py-3 px-5'
+                  >
+                    <Circle /> Corrected
+                  </button>
+                </div>
               </div>
             ) : (
               <button
