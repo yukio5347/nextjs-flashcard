@@ -15,9 +15,9 @@ export default function Edit({ card }: { card: CardType }) {
     words: card.words
       .map((word) => {
         if (word.example) {
-          return `${word.front},${word.back},${word.example}`;
+          return `${word.front} | ${word.back} | ${word.example}`;
         } else {
-          return `${word.front},${word.back}`;
+          return `${word.front} | ${word.back}`;
         }
       })
       .join('\n'),

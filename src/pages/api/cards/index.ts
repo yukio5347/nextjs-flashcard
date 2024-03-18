@@ -32,7 +32,7 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
         data: { title: req.body.title },
       });
       const words = req.body.words.split('\n').map((line: string) => {
-        const [front, back, example] = line.split(',');
+        const [front, back, example] = line.split(' | ');
         return { front, back, example, cardId: card.id };
       });
       await prisma.word.createMany({ data: words });

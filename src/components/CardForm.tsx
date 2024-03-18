@@ -68,12 +68,12 @@ export const CardForm = ({ card = defaultData }: { card?: DataType }) => {
         required
         onChange={handleChange}
         rows={8}
-        placeholder='merah,red'
+        placeholder='front word | back word | example sentence'
         name='words'
         value={formData.words}
         className='p-4 w-full border border-gray-300 rounded-lg'
       />
-      <p className='text-sm text-gray-500'>* 1 line and comma separated for a word pair</p>
+      <p className='text-sm text-gray-500'>* 1 line for a word pair with separator &quot; | &quot;</p>
       <div className='flex justify-between mt-5'>
         <button
           disabled={!formData.title || !formData.words || processing}
