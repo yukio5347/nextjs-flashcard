@@ -44,7 +44,8 @@ export default function Index({ card }: { card: CardType }) {
     }
   };
 
-  const resetCard = () => {
+  const startCard = (reset = false) => {
+    reset && setWords(card.words);
     setIndex(0);
     setShowAnswer(false);
     setCorrectedWords([]);
@@ -54,7 +55,7 @@ export default function Index({ card }: { card: CardType }) {
   const tryMissedWords = () => {
     const newWords = missedWords.map((index) => words[index]);
     setWords(newWords);
-    resetCard();
+    startCard();
   };
 
   // const eraseCorrectedWords = async (card: Card, index: number) => {
@@ -73,7 +74,7 @@ export default function Index({ card }: { card: CardType }) {
   // };
 
   useEffect(() => {
-    resetCard();
+    startCard();
     isRandom && shuffleWords();
   }, [words, isRandom, isBackward]);
 
@@ -140,10 +141,10 @@ export default function Index({ card }: { card: CardType }) {
               </button> */}
             </div>
             <button
-              onClick={resetCard}
+              onClick={() => startCard(true)}
               className='p-5 w-full h-36 items-center justify-center rounded-lg flex flex-col shadow transition-shadow hover:shadow-lg'
             >
-              Restart
+              Reset
               <Rotate />
             </button>
             {missedWords.length > 0 ? (
@@ -156,7 +157,7 @@ export default function Index({ card }: { card: CardType }) {
               </button>
             ) : (
               <div className='p-5 w-full h-36 items-center justify-center rounded-lg flex flex-col'>
-                You Corrected All!
+                All Correct!!
                 <ThumbsUp />
               </div>
             )}
